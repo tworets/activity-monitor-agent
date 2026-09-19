@@ -59,6 +59,30 @@ class ThreadSafeQueue {
             deque_.pop_front();
             return value;
         }
+
+        std::optional<T> peek() {
+        
+            std::unique_lock<std::mutex> lock(mutex_);
+            cv_.wait(lock, [&] { return !deque_.empty() || stopped_; });
+
+            if (deque_.empty() && stopped_) {
+                return std::nullopt;
+            }
+
+            return deque_.front();
+
+        };
+
+        std::deque<T> extractAll() {
+
+            std::deque<T> result;
+
+            std::lock_guard<std::mutex> guard(mutex_);
+            result.swap(deque_);
+            
+            return result;
+
+        };
 };
 
 #endif
