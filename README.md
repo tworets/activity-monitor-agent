@@ -22,6 +22,7 @@
 ## Требования
 
 - **C++20**: Протестировано на **MSVC 19.3x** и **Clang 22** (MSVC target). 
+Clang на Windows требует установленного MSVC — он использует его STL, Windows SDK и линкер. 
 **MinGW-w64** не поддерживается из-за ограничений cpp-httplib.
 - **CMake** ≥ 3.28.
 - **Ninja** (поставляется с Visual Studio).
@@ -36,10 +37,15 @@
 - `cpp-httplib` - HTTP-клиент.
 
 ## Сборка
-
+Клонировать репозиторий github
 ```bash
 git clone https://github.com/tworets/activity-monitor-agent.git
 cd activity-monitor-agent
+```
+Сборка предполагает окружение Developer Command Prompt for Visual Studio. 
+Откройте его через меню Пуск → Visual Studio → Developer Command Prompt. В нём доступны ninja и cl.exe.
+
+```bash
 cmake --preset debug
 cmake --build --preset debug
 ```
@@ -50,9 +56,23 @@ Release:
 cmake --preset release
 cmake --build --preset release
 ```
+Альтернативные варианты: 
 
-Если `cl.exe` не находится, запускайте сборку из **Developer Command Prompt for VS**.
+Сборка через **CMD** 
 
+**MSVC** компилятор (в зависимости от установленного генератора 
+ "Visual Studio 18 2026" или "Visual Studio 17 2022" )
+
+```bash
+cmake -S . -B build -G "Visual Studio 18 2026" 
+cmake --build build --config Debug
+```
+**Clang** компилятор (MSVC target). 
+
+```bash
+cmake -S . -B build-clang -DCMAKE_CXX_COMPILER=clang++
+cmake --build build-clang
+```
 ## Запуск
 
 1. Запустите демонстрационный сервер в отдельном терминале:
