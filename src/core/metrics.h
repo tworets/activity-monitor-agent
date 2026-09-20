@@ -4,12 +4,10 @@
 #include <string>
 
 struct Metrics {
-
-	std::string time{};
-	std::string processName{};
-	std::string windowTitle{};
-	bool userActive{};
-
+  std::string time{};
+  std::string processName{};
+  std::string windowTitle{};
+  bool userActive{};
 };
 
 #endif

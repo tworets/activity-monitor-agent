@@ -8,16 +8,13 @@
 #include <utility>
 
 class PacketBuilder {
+ public:
+  explicit PacketBuilder(std::string agentId) : agentId_{std::move(agentId)} {};
 
-    public:
+  std::string build(const std::deque<Metrics>& metrics) const;
 
-        explicit PacketBuilder(std::string agentId) : agentId_{ std::move(agentId) } {};
-
-        std::string build(const std::deque<Metrics>& metrics) const;
-
-    private:
-
-        std::string agentId_;
+ private:
+  std::string agentId_;
 };
 
 #endif

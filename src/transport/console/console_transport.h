@@ -4,11 +4,8 @@
 #include "core/transport.h"
 
 class ConsoleTransport : public Transport {
-
-	public:
-
-		bool send(const std::string& packet) override;
-
+ public:
+  bool send(const std::string& packet) override;
 };
 
-#endif 
+#endif

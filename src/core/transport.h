@@ -4,13 +4,9 @@
 #include <string>
 
 class Transport {
-
-	public:
-
-		virtual ~Transport() = default;
-		virtual bool send(const std::string& packet) = 0; 
-
+ public:
+  virtual ~Transport() = default;
+  virtual bool send(const std::string& packet) = 0;
 };
-
 
 #endif

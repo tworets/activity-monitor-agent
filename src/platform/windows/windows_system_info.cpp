@@ -1,4 +1,5 @@
 #include "windows_system_info.h"
+
 #include "wide_to_utf8.h"
 
 #define WIN32_LEAN_AND_MEAN
@@ -7,19 +8,17 @@
 
 #include <string>
 
-std::string WindowsSystemInfo::getComputerName(){
-	
-	// максимальная длина имени компьютера + ноль-терминатор
-	DWORD bufferSize { MAX_COMPUTERNAME_LENGTH + 1 };
+std::string WindowsSystemInfo::getComputerName() {
+  // максимальная длина имени компьютера + ноль-терминатор
+  DWORD bufferSize{MAX_COMPUTERNAME_LENGTH + 1};
 
-	std::wstring buffer(bufferSize, L'\0');
+  std::wstring buffer(bufferSize, L'\0');
 
-	if (!GetComputerNameW(buffer.data(), &bufferSize)) {
-		return {};
-	}
+  if (!GetComputerNameW(buffer.data(), &bufferSize)) {
+    return {};
+  }
 
-	buffer.resize(bufferSize);
+  buffer.resize(bufferSize);
 
-	return wideToUtf8(buffer);
-
+  return wideToUtf8(buffer);
 };

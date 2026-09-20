@@ -3,9 +3,7 @@
 #include <iostream>
 
 bool ConsoleTransport::send(const std::string& packet) {
+  std::cout << packet << std::endl;
 
-	std::cout << packet << std::endl;
-
-	return true;
-
+  return true;
 }

@@ -4,12 +4,9 @@
 #include "metrics.h"
 
 class MetricsCollector {
-
-	public: 
-
-		virtual ~MetricsCollector() = default;
-		virtual Metrics collect() = 0;
-
+ public:
+  virtual ~MetricsCollector() = default;
+  virtual Metrics collect() = 0;
 };
 
 #endif

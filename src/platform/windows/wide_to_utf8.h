@@ -5,4 +5,4 @@
 
 std::string wideToUtf8(const std::wstring& wstring);
 
-#endif 
+#endif

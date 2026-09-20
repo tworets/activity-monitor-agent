@@ -1,105 +1,97 @@
 #ifndef THREAD_SAFE_QUEUE_H
 #define THREAD_SAFE_QUEUE_H
 
-#include <cstddef>
 #include <condition_variable>
+#include <cstddef>
 #include <deque>
 #include <mutex>
 #include <optional>
 
 template <typename T>
 class ThreadSafeQueue {
-    private:
-        std::deque<T> deque_;
-        size_t maxSize_;
-        mutable std::mutex mutex_;
-        std::condition_variable cv_;
-        bool stopped_ = false;
+ private:
+  std::deque<T> deque_;
+  size_t maxSize_;
+  mutable std::mutex mutex_;
+  std::condition_variable cv_;
+  bool stopped_ = false;
 
-    public:
-        explicit ThreadSafeQueue(size_t maxSize) : maxSize_(maxSize) {}
+ public:
+  explicit ThreadSafeQueue(size_t maxSize) : maxSize_(maxSize) {}
 
-        size_t size() const {
-            std::lock_guard<std::mutex> guard(mutex_);
-            return deque_.size();
-        }
+  size_t size() const {
+    std::lock_guard<std::mutex> guard(mutex_);
+    return deque_.size();
+  }
 
-        void stop() {
-            {
-                std::lock_guard<std::mutex> guard(mutex_);
-                stopped_ = true;
-            }
-            cv_.notify_all();
-        }
+  void stop() {
+    {
+      std::lock_guard<std::mutex> guard(mutex_);
+      stopped_ = true;
+    }
+    cv_.notify_all();
+  }
 
-        void push(T value) {
-            std::lock_guard<std::mutex> guard(mutex_);
+  void push(T value) {
+    std::lock_guard<std::mutex> guard(mutex_);
 
-            if (stopped_) {
-                return;
-            }
+    if (stopped_) {
+      return;
+    }
 
-            if (deque_.size() >= maxSize_) {
-                deque_.pop_front();
-            }
+    if (deque_.size() >= maxSize_) {
+      deque_.pop_front();
+    }
 
-            deque_.push_back(std::move(value));
-            cv_.notify_one();
-        }
+    deque_.push_back(std::move(value));
+    cv_.notify_one();
+  }
 
-        std::optional<T> pop() {
-            std::unique_lock<std::mutex> lock(mutex_);
-            cv_.wait(lock, [&] { return !deque_.empty() || stopped_; });
+  std::optional<T> pop() {
+    std::unique_lock<std::mutex> lock(mutex_);
+    cv_.wait(lock, [&] { return !deque_.empty() || stopped_; });
 
-            if (deque_.empty() && stopped_) {
-                return std::nullopt;
-            }
+    if (deque_.empty() && stopped_) {
+      return std::nullopt;
+    }
 
-            T value(std::move(deque_.front()));
-            deque_.pop_front();
-            return value;
-        }
+    T value(std::move(deque_.front()));
+    deque_.pop_front();
+    return value;
+  }
 
-        std::optional<T> peek() {
-        
-            std::unique_lock<std::mutex> lock(mutex_);
-            cv_.wait(lock, [&] { return !deque_.empty() || stopped_; });
+  std::optional<T> peek() {
+    std::unique_lock<std::mutex> lock(mutex_);
+    cv_.wait(lock, [&] { return !deque_.empty() || stopped_; });
 
-            if (deque_.empty() && stopped_) {
-                return std::nullopt;
-            }
+    if (deque_.empty() && stopped_) {
+      return std::nullopt;
+    }
 
-            return deque_.front();
+    return deque_.front();
+  };
 
-        };
+  std::deque<T> extractAll() {
+    std::deque<T> result;
 
-        std::deque<T> extractAll() {
+    std::lock_guard<std::mutex> guard(mutex_);
+    result.swap(deque_);
 
-            std::deque<T> result;
+    return result;
+  };
 
-            std::lock_guard<std::mutex> guard(mutex_);
-            result.swap(deque_);
-            
-            return result;
+  std::deque<T> peekAll() {
+    std::lock_guard<std::mutex> guard(mutex_);
 
-        };
+    return std::deque<T>(deque_.begin(), deque_.end());
+  }
 
-        std::deque<T> peekAll() {
+  void removeFront(size_t n) {
+    std::lock_guard<std::mutex> guard(mutex_);
 
-            std::lock_guard<std::mutex> guard(mutex_);
-
-            return std::deque<T>(deque_.begin(), deque_.end());
-
-        }
-
-        void removeFront(size_t n) {
-
-            std::lock_guard<std::mutex> guard(mutex_);
-
-            const auto count = std::min(n, deque_.size());
-            deque_.erase(deque_.begin(), deque_.begin() + count);
-
-        }
+    const auto count = std::min(n, deque_.size());
+    deque_.erase(deque_.begin(), deque_.begin() + count);
+  }
 };
 
 #endif

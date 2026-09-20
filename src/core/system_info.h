@@ -4,13 +4,9 @@
 #include <string>
 
 class SystemInfo {
-
-	public:
-
-		virtual ~SystemInfo() = default;
-		virtual std::string getComputerName() = 0;
-
+ public:
+  virtual ~SystemInfo() = default;
+  virtual std::string getComputerName() = 0;
 };
-
 
 #endif

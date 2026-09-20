@@ -4,23 +4,22 @@
 
 #include <string>
 
-constexpr int connectionTimeoutSec{ 5 };
-constexpr int readTimeoutSec{ 5 };
+constexpr int connectionTimeoutSec{5};
+constexpr int readTimeoutSec{5};
 
 bool HttpTransport::send(const std::string& packet) {
+  httplib::Client cli(url_);
+  if (!cli.is_valid()) {
+    return false;
+  }
 
-    httplib::Client cli(url_);
-    if (!cli.is_valid()) {
-        return false;
-    }
+  cli.set_connection_timeout(connectionTimeoutSec);
+  cli.set_read_timeout(readTimeoutSec);
 
-    cli.set_connection_timeout(connectionTimeoutSec);
-    cli.set_read_timeout(readTimeoutSec);
+  const auto res{cli.Post("/", packet, "application/json")};
+  if (!res) {
+    return false;
+  }
 
-    const auto res { cli.Post("/", packet, "application/json") };
-    if (!res) {
-        return false;
-    }
-
-    return res->status >= 200 && res->status < 300;
+  return res->status >= 200 && res->status < 300;
 }
