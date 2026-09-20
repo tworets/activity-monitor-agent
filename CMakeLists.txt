@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.28)
 
-project(activity-monitor-agent)
+project(activity-monitor-agent
+    VERSION 1.0.0
+    DESCRIPTION "Агент мониторинга активности пользователя"
+    LANGUAGES CXX
+)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -26,16 +30,34 @@ FetchContent_MakeAvailable(nlohmann_json cpp_httplib)
 
 add_executable(activity-monitor-agent
     src/main.cpp
+
+    src/core/agent.cpp
+    src/core/application.cpp
+    src/core/backup.cpp
+    src/core/packet_builder.cpp
+
+    src/platform/windows/wide_to_utf8.cpp
+    src/platform/windows/windows_metrics_collector.cpp
+    src/platform/windows/windows_stop_signal.cpp
+    src/platform/windows/windows_system_info.cpp
+
+    src/transport/console/console_transport.cpp
+    src/transport/http/http_transport.cpp
 )
+
+target_include_directories(activity-monitor-agent PRIVATE src)
 
 target_link_libraries(activity-monitor-agent PRIVATE
     nlohmann_json::nlohmann_json
     httplib::httplib
 )
 
-if (WIN32)
+if(WIN32)
     target_link_libraries(activity-monitor-agent PRIVATE
         kernel32
         user32
     )
 endif()
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+include(ClangFormat)
