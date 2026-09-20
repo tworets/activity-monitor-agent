@@ -9,13 +9,6 @@
 
 template <typename T>
 class ThreadSafeQueue {
- private:
-  std::deque<T> deque_;
-  size_t maxSize_;
-  mutable std::mutex mutex_;
-  std::condition_variable cv_;
-  bool stopped_ = false;
-
  public:
   explicit ThreadSafeQueue(size_t maxSize) : maxSize_(maxSize) {}
 
@@ -92,6 +85,13 @@ class ThreadSafeQueue {
     const auto count = std::min(n, deque_.size());
     deque_.erase(deque_.begin(), deque_.begin() + count);
   }
+
+ private:
+  std::deque<T> deque_;
+  size_t maxSize_;
+  mutable std::mutex mutex_;
+  std::condition_variable cv_;
+  bool stopped_ = false;
 };
 
 #endif
