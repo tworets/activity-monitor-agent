@@ -1,7 +1,7 @@
 #ifndef WINDOWS_SYSTEM_INFO_H
 #define WINDOWS_SYSTEM_INFO_H
 
-#include "core/system_info.h"
+#include "core/interface/system_info.h"
 
 #include <string>
 

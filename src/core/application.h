@@ -8,7 +8,7 @@
 #include "platform/windows/windows_metrics_collector.h"
 #include "platform/windows/windows_system_info.h"
 #include "thread_safe_queue.h"
-#include "transport.h"
+#include "interface/transport.h"
 #include "transport/http/http_transport.h"
 
 class Application {

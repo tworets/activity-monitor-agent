@@ -1,4 +1,4 @@
-#include "core/stop_signal.h"
+#include "core/interface/stop_signal.h"
 
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX

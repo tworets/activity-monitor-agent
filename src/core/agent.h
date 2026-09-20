@@ -1,10 +1,10 @@
 #ifndef AGENT_H
 #define AGENT_H
 
-#include "metrics_collector.h"
+#include "interface/metrics_collector.h"
 #include "packet_builder.h"
 #include "thread_safe_queue.h"
-#include "transport.h"
+#include "interface/transport.h"
 
 #include <atomic>
 #include <thread>

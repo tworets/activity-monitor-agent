@@ -1,7 +1,7 @@
 #ifndef CONSOLE_TRANSPORT_H
 #define CONSOLE_TRANSPORT_H
 
-#include "core/transport.h"
+#include "core/interface/transport.h"
 
 class ConsoleTransport : public Transport {
  public:

@@ -1,6 +1,6 @@
 #include "core/application.h"
 
-#include "core/stop_signal.h"
+#include "core/interface/stop_signal.h"
 
 #include <iostream>
 

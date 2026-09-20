@@ -1,7 +1,7 @@
 #ifndef HTTP_TRANSPORT_H
 #define HTTP_TRANSPORT_H
 
-#include "core/transport.h"
+#include "core/interface/transport.h"
 
 #include <string>
 

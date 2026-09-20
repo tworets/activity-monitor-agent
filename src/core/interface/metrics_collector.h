@@ -1,7 +1,7 @@
 #ifndef METRICS_COLLECTOR_H
 #define METRICS_COLLECTOR_H
 
-#include "metrics.h"
+#include "core/metrics.h"
 
 class MetricsCollector {
  public:
