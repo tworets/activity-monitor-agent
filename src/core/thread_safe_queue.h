@@ -83,6 +83,23 @@ class ThreadSafeQueue {
             return result;
 
         };
+
+        std::deque<T> peekAll() {
+
+            std::lock_guard<std::mutex> guard(mutex_);
+
+            return std::deque<T>(deque_.begin(), deque_.end());
+
+        }
+
+        void removeFront(size_t n) {
+
+            std::lock_guard<std::mutex> guard(mutex_);
+
+            const auto count = std::min(n, deque_.size());
+            deque_.erase(deque_.begin(), deque_.begin() + count);
+
+        }
 };
 
 #endif
