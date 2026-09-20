@@ -1,6 +1,7 @@
 #include "packet_builder.h"
 
 #include "metrics.h"
+#include "metrics_json.h"
 
 #include <nlohmann/json.hpp>
 
