@@ -7,7 +7,7 @@
 
 #include <string>
 
-std::string getComputerName(){
+std::string WindowsSystemInfo::getComputerName(){
 	
 	// максимальная длина имени компьютера + ноль-терминатор
 	DWORD bufferSize { MAX_COMPUTERNAME_LENGTH + 1 };
