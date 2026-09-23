@@ -3,6 +3,6 @@
 
 #include <string>
 
-std::string wideToUtf8(const std::wstring& wstring);
+std::string wideToUtf8(const std::wstring& ws);
 
 #endif

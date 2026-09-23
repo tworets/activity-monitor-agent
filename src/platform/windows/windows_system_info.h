@@ -7,7 +7,7 @@
 
 class WindowsSystemInfo : public SystemInfo {
  public:
-  std::string getComputerName() override;
+  std::string getComputerName() const override;
 };
 
 #endif

@@ -5,7 +5,7 @@
 
 class ConsoleTransport : public Transport {
  public:
-  bool send(const std::string& packet) override;
+  bool send(const std::string& packet) const override;
 };
 
 #endif

@@ -1,6 +1,7 @@
 #ifndef THREAD_SAFE_QUEUE_H
 #define THREAD_SAFE_QUEUE_H
 
+#include <algorithm>
 #include <condition_variable>
 #include <cstddef>
 #include <deque>
@@ -10,9 +11,9 @@
 template <typename T>
 class ThreadSafeQueue {
  public:
-  explicit ThreadSafeQueue(size_t maxSize) : maxSize_(maxSize) {}
+  explicit ThreadSafeQueue(std::size_t maxSize) : maxSize_(maxSize) {}
 
-  size_t size() const {
+  std::size_t size() const {
     std::lock_guard<std::mutex> guard(mutex_);
     return deque_.size();
   }
@@ -53,17 +54,6 @@ class ThreadSafeQueue {
     return value;
   }
 
-  std::optional<T> peek() {
-    std::unique_lock<std::mutex> lock(mutex_);
-    cv_.wait(lock, [&] { return !deque_.empty() || stopped_; });
-
-    if (deque_.empty() && stopped_) {
-      return std::nullopt;
-    }
-
-    return deque_.front();
-  };
-
   std::deque<T> extractAll() {
     std::deque<T> result;
 
@@ -71,7 +61,7 @@ class ThreadSafeQueue {
     result.swap(deque_);
 
     return result;
-  };
+  }
 
   std::deque<T> peekAll() {
     std::lock_guard<std::mutex> guard(mutex_);
@@ -79,19 +69,19 @@ class ThreadSafeQueue {
     return std::deque<T>(deque_.begin(), deque_.end());
   }
 
-  void removeFront(size_t n) {
+  void removeFront(std::size_t count) {
     std::lock_guard<std::mutex> guard(mutex_);
 
-    const auto count = std::min(n, deque_.size());
-    deque_.erase(deque_.begin(), deque_.begin() + count);
+    const auto actualCount{std::min(count, deque_.size())};
+    deque_.erase(deque_.begin(), deque_.begin() + actualCount);
   }
 
  private:
-  std::deque<T> deque_;
-  size_t maxSize_;
-  mutable std::mutex mutex_;
-  std::condition_variable cv_;
-  bool stopped_ = false;
+  std::deque<T> deque_{};
+  size_t maxSize_{};
+  mutable std::mutex mutex_{};
+  std::condition_variable cv_{};
+  bool stopped_{false};
 };
 
 #endif

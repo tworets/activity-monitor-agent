@@ -1,14 +1,14 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include "agent.h"
-#include "backup.h"
-#include "metrics.h"
-#include "packet_builder.h"
+#include "core/agent.h"
+#include "core/backup.h"
+#include "core/interface/transport.h"
+#include "core/metrics.h"
+#include "core/packet_builder.h"
+#include "core/thread_safe_queue.h"
 #include "platform/windows/windows_metrics_collector.h"
 #include "platform/windows/windows_system_info.h"
-#include "thread_safe_queue.h"
-#include "interface/transport.h"
 #include "transport/http/http_transport.h"
 
 class Application {

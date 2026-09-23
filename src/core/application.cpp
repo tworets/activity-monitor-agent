@@ -1,9 +1,7 @@
-#include "application.h"
+#include "core/application.h"
 
-#include "interface/stop_signal.h"
+#include "core/interface/stop_signal.h"
 
-#include <filesystem>
-#include <iostream>
 #include <utility>
 
 namespace {
@@ -26,8 +24,8 @@ Application::Application()
 void Application::run() {
   auto restored{backup_.loadBackup()};
   if (restored && !restored->empty()) {
-    for (auto& m : *restored) {
-      queue_.push(std::move(m));
+    for (auto& metric : *restored) {
+      queue_.push(std::move(metric));
     }
     backup_.removeBackup();
   }

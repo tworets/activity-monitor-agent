@@ -6,7 +6,7 @@
 class MetricsCollector {
  public:
   virtual ~MetricsCollector() = default;
-  virtual Metrics collect() = 0;
+  virtual Metrics collect() const = 0;
 };
 
 #endif

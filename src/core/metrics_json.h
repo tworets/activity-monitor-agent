@@ -1,9 +1,9 @@
 #ifndef METRICS_JSON_H
 #define METRICS_JSON_H
 
-#include <nlohmann/json.hpp>
+#include "core/metrics.h"
 
-#include "metrics.h"
+#include <nlohmann/json.hpp>
 
 inline void to_json(nlohmann::json& j, const Metrics& m) {
   j = nlohmann::json{{"time", m.time},

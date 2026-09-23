@@ -1,12 +1,14 @@
 #ifndef AGENT_H
 #define AGENT_H
 
-#include "interface/metrics_collector.h"
-#include "packet_builder.h"
-#include "thread_safe_queue.h"
-#include "interface/transport.h"
+#include "core/interface/metrics_collector.h"
+#include "core/interface/transport.h"
+#include "core/packet_builder.h"
+#include "core/thread_safe_queue.h"
 
 #include <atomic>
+#include <condition_variable>
+#include <mutex>
 #include <thread>
 
 class Agent {
@@ -16,10 +18,10 @@ class Agent {
       : collector_(collector),
         queue_(queue),
         transport_(transport),
-        packetBuilder_(packetBuilder) {};
+        packetBuilder_(packetBuilder) {}
   ~Agent() {
     stop();
-  };
+  }
 
   void stop();
   void start();
@@ -29,11 +31,11 @@ class Agent {
   ThreadSafeQueue<Metrics>& queue_;
   Transport& transport_;
   PacketBuilder& packetBuilder_;
-  std::thread collectorThread_;
-  std::thread transportThread_;
+  std::thread collectorThread_{};
+  std::thread transportThread_{};
   std::atomic<bool> stopRequested_{false};
-  std::mutex mutex_;
-  std::condition_variable cv_;
+  std::mutex mutex_{};
+  std::condition_variable cv_{};
 
   void collectorLoop();
   void transportLoop();

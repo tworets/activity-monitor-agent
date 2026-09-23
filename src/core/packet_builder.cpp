@@ -1,18 +1,18 @@
-#include "packet_builder.h"
+#include "core/packet_builder.h"
 
-#include "metrics.h"
-#include "metrics_json.h"
+#include "core/metrics.h"
+#include "core/metrics_json.h"
+
+#include <nlohmann/json.hpp>
 
 #include <chrono>
 #include <deque>
-#include <nlohmann/json.hpp>
-#include <utility>
 
 std::string PacketBuilder::build(const std::deque<Metrics>& metrics) const {
-  const auto now = std::chrono::system_clock::now();
-  const auto timestamp =
+  const auto now{std::chrono::system_clock::now()};
+  const auto timestamp{
       std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch())
-          .count();
+          .count()};
 
   nlohmann::json packet;
   packet["agent_id"] = agentId_;

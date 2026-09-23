@@ -6,7 +6,7 @@
 class SystemInfo {
  public:
   virtual ~SystemInfo() = default;
-  virtual std::string getComputerName() = 0;
+  virtual std::string getComputerName() const = 0;
 };
 
 #endif

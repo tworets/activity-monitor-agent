@@ -1,6 +1,6 @@
-#include "windows_metrics_collector.h"
+#include "platform/windows/windows_metrics_collector.h"
 
-#include "wide_to_utf8.h"
+#include "platform/windows/wide_to_utf8.h"
 
 #define WIN32_LEAN_AND_MEAN
 #ifndef NOMINMAX
@@ -44,25 +44,26 @@ std::string getProcessName(HWND hWnd) {
   // MAX_PATH * 2 запас на случай длинных путей
   DWORD bufferSize{MAX_PATH * 2};
 
-  std::wstring buf(bufferSize, L'\0');
+  std::wstring buffer(bufferSize, L'\0');
 
-  HANDLE handle{OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid)};
-  if (!handle) {
+  HANDLE hProcess{OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid)};
+  if (!hProcess) {
     return {};
   }
 
-  // handle закрывается до проверки результата, чтобы освободить его в любом
+  // hProcess закрывается до проверки результата, чтобы освободить его в любом
   // случае
   const BOOL nameRetrieved{
-      QueryFullProcessImageNameW(handle, 0, buf.data(), &bufferSize)};
+      QueryFullProcessImageNameW(hProcess, 0, buffer.data(), &bufferSize)};
 
-  CloseHandle(handle);
+  CloseHandle(hProcess);
 
   if (!nameRetrieved) {
     return {};
   }
 
-  const std::filesystem::path path{std::wstring_view(buf.data(), bufferSize)};
+  const std::filesystem::path path{
+      std::wstring_view(buffer.data(), bufferSize)};
 
   return wideToUtf8(path.filename().native());
 }
@@ -93,7 +94,7 @@ std::string getLocalTimeString() {
 
 }  // namespace
 
-Metrics WindowsMetricsCollector::collect() {
+Metrics WindowsMetricsCollector::collect() const {
   Metrics metrics;
   metrics.time = getLocalTimeString();
 

@@ -6,7 +6,7 @@
 class Transport {
  public:
   virtual ~Transport() = default;
-  virtual bool send(const std::string& packet) = 0;
+  virtual bool send(const std::string& packet) const = 0;
 };
 
 #endif

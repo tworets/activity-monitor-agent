@@ -1,6 +1,6 @@
-#include "windows_system_info.h"
+#include "platform/windows/windows_system_info.h"
 
-#include "wide_to_utf8.h"
+#include "platform/windows/wide_to_utf8.h"
 
 #define WIN32_LEAN_AND_MEAN
 #ifndef NOMINMAX
@@ -10,7 +10,7 @@
 
 #include <string>
 
-std::string WindowsSystemInfo::getComputerName() {
+std::string WindowsSystemInfo::getComputerName() const {
   // максимальная длина имени компьютера + ноль-терминатор
   DWORD bufferSize{MAX_COMPUTERNAME_LENGTH + 1};
 
@@ -23,4 +23,4 @@ std::string WindowsSystemInfo::getComputerName() {
   buffer.resize(bufferSize);
 
   return wideToUtf8(buffer);
-};
+}
